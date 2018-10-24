@@ -10,20 +10,22 @@ N_GENERATIONS = 200
 X_BOUND = [0, 5]  # x upper and lower bounds
 
 
-def F(x): return np.sin(10 * x) * x + np.cos(2 * x) * x  # to find the maximum of this function
+def F(x): 
+    return np.sin(10 * x) * x + np.cos(2 * x) * x  # to find the maximum of this function
 
 
 # find non-zero fitness for selection
-def get_fitness(pred): return pred + 1e-3 - np.min(pred)
+def get_fitness(pred): 
+    return pred + 1e-3 - np.min(pred)
 
 
 # convert binary DNA to decimal and normalize it to a range(0, 5)
-def translateDNA(pop): return pop.dot(2 ** np.arange(DNA_SIZE)[::-1]) / float(2 ** DNA_SIZE - 1) * X_BOUND[1]
+def translateDNA(pop): 
+    return pop.dot(2 ** np.arange(DNA_SIZE)[::-1]) / float(2 ** DNA_SIZE - 1) * X_BOUND[1]
 
 
 def select(pop, fitness):  # nature selection wrt pop's fitness
-    idx = np.random.choice(np.arange(POP_SIZE), size=POP_SIZE, replace=True,
-                           p=fitness / fitness.sum())
+    idx = np.random.choice(np.arange(POP_SIZE), size=POP_SIZE, replace=True,p=fitness / fitness.sum())
     return pop[idx]
 
 
