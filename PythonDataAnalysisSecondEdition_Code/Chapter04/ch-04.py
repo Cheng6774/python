@@ -1,10 +1,10 @@
 '''
-@Description: -*- coding: utf-8 -*-
+@Description: python file
 @Author: Cheng
 @Github: https://github.com/Cheng6774
-@Date: 2018-11-18 17:40:27
-@LastEditors: Please set LastEditors
-@LastEditTime: 2018-11-22 21:50:21
+@Date: 2018-11-18 17:41:19
+@LastEditors: Cheng
+@LastEditTime: 2018-11-23 22:42:53
 '''
 
 import numpy as np
