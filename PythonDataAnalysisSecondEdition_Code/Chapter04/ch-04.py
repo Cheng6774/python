@@ -11,8 +11,7 @@ import numpy as np
 from scipy.stats import scoreatpercentile
 import pandas as pd
 
-
-data = pd.read_csv("co2.csv",index_col=0, parse_dates=True)
+data = pd.read_csv("co2.csv", index_col=0, parse_dates=True)
 
 co2 = np.array(data.co2)
 
@@ -61,9 +60,8 @@ eigenvalues, eigenvectors = np.linalg.eig(A)
 print("First tuple of eig", eigenvalues)
 print("Second tuple of eig \n", eigenvectors)
 for i in range(len(eigenvalues)):
-    print("Left",np.dot(A,eigenvectors)[:,i])
-    print("Right",eigenvalues[i]*eigenvectors[:,i])
-
+    print("Left", np.dot(A, eigenvectors)[:, i])
+    print("Right", eigenvalues[i] * eigenvectors[:, i])
 
 # 用二项式分布进行博弈
 import numpy as np
@@ -71,15 +69,15 @@ from matplotlib.pyplot import plot, show
 
 cash = np.zeros(10000)
 cash[0] = 1000
-outcome = np.random.binomial(9,0.5,size=(len(cash)))
-for i in range (1,len(cash)):
-    if outcome[i]<5:
-        cash[i]=cash[i-1]-1
-    elif outcome[i]<10:
-        cash[i]=cash[i-1]+1
+outcome = np.random.binomial(9, 0.5, size=(len(cash)))
+for i in range(1, len(cash)):
+    if outcome[i] < 5:
+        cash[i] = cash[i - 1] - 1
+    elif outcome[i] < 10:
+        cash[i] = cash[i - 1] + 1
     else:
-        raise AssertionError("Unexpected outcome"+outcome)
-print(outcome.min(),outcome.max())
+        raise AssertionError("Unexpected outcome" + outcome)
+print(outcome.min(), outcome.max())
 # plot(np.arange(len(cash)),cash)
 #show()
 
@@ -102,7 +100,13 @@ from scipy.stats import shapiro
 from scipy.stats import anderson
 from scipy.stats import normaltest
 
-flutrends = np.loadtxt("goog_flutrends.csv", delimiter=',', usecols=(1,), skiprows=1, converters = {1: lambda s: float(s or 0)}, unpack=True)
+flutrends = np.loadtxt(
+    "goog_flutrends.csv",
+    delimiter=',',
+    usecols=(1, ),
+    skiprows=1,
+    converters={1: lambda s: float(s or 0)},
+    unpack=True)
 N = len(flutrends)
 normal_values = np.random.normal(size=N)
 zero_values = np.zeros(N)
@@ -118,3 +122,77 @@ print("Flu Anderson", anderson(flutrends))
 print("Normal Values normaltest", normaltest(normal_values))
 #print("Zeroes normaltest", normaltest(zero_values))
 print("Flu normaltest", normaltest(flutrends))
+
+#创建掩码式numpy数组
+import numpy
+import scipy
+import matplotlib.pyplot as plt
+
+face = scipy.misc.face()
+
+random_mask = numpy.random.randint(0, 2, size=face.shape)
+
+plt.subplot(221)
+plt.title("Original")
+plt.imshow(face)
+plt.axis('off')
+
+masked_array = numpy.ma.array(face, mask=random_mask)
+
+plt.subplot(222)
+plt.title("Masked")
+plt.imshow(masked_array)
+plt.axis('off')
+
+plt.subplot(223)
+plt.title("Log")
+plt.imshow(numpy.ma.log(face).astype("float32"))
+plt.axis('off')
+
+plt.subplot(224)
+plt.title("Log Masked")
+plt.imshow(numpy.ma.log(masked_array).astype("float32"))
+plt.axis('off')
+
+plt.show()
+
+# 忽略负值和极值
+import numpy as np
+from datetime import date
+import sys
+import matplotlib.pyplot as plt
+
+salary = np.loadtxt(
+    "MLB2008.csv", delimiter=',', usecols=(1, ), skiprows=1, unpack=True)
+triples = np.arange(0, len(salary), 3)
+print("Triples", triples[:10], "...")
+
+signs = np.ones(len(salary))
+print("Signs", signs[:10], "...")
+
+signs[triples] = -1
+print("Signs", signs[:10], "...")
+
+ma_log = np.ma.log(salary * signs)
+print("Masked logs", ma_log[:10], "...")
+
+dev = salary.std()
+avg = salary.mean()
+inside = np.ma.masked_outside(salary, avg - dev, avg + dev)
+print("Inside", inside[:10], "...")
+
+plt.subplot(311)
+plt.title("Original")
+plt.plot(salary)
+
+plt.subplot(312)
+plt.title("Log Masked")
+plt.plot(np.exp(ma_log))
+
+plt.subplot(313)
+plt.title("Not Extreme")
+plt.plot(inside)
+
+plt.subplots_adjust(hspace=.9)
+
+plt.show()
